@@ -1,0 +1,43 @@
+services:
+  servidor1:
+    build: .
+    image: electiva2-ubuntu-ansible:local
+    hostname: servidor1
+    ports:
+      - "2221:22"
+
+  servidor2:
+    image: electiva2-ubuntu-ansible:local
+    pull_policy: never
+    depends_on:
+      - servidor1
+    hostname: servidor2
+    ports:
+      - "2222:22"
+
+  servidor3:
+    image: electiva2-ubuntu-ansible:local
+    pull_policy: never
+    depends_on:
+      - servidor1
+    hostname: servidor3
+    ports:
+      - "2223:22"
+
+  servidor4:
+    image: electiva2-ubuntu-ansible:local
+    pull_policy: never
+    depends_on:
+      - servidor1
+    hostname: servidor4
+    ports:
+      - "2224:22"
+
+  servidor5:
+    image: electiva2-ubuntu-ansible:local
+    pull_policy: never
+    depends_on:
+      - servidor1
+    hostname: servidor5
+    ports:
+      - "2225:22"

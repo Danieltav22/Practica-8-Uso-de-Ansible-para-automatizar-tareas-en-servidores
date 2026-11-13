@@ -1,0 +1,39 @@
+---
+- name: Configurar los cinco servidores Ubuntu
+  hosts: servidores
+  become: true
+
+  tasks:
+    - name: Actualizar la cache de APT
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Crear el usuario itla
+      ansible.builtin.user:
+        name: itla
+        shell: /bin/bash
+        create_home: true
+        state: present
+
+    - name: Crear la carpeta app
+      ansible.builtin.file:
+        path: /app
+        state: directory
+        owner: itla
+        group: itla
+        mode: '0755'
+
+    - name: Crear el archivo hola.txt dentro de app
+      ansible.builtin.copy:
+        dest: /app/hola.txt
+        content: "Hola mundo desde Ansible.\n"
+        owner: itla
+        group: itla
+        mode: '0644'
+
+    - name: Instalar cowsay y htop
+      ansible.builtin.apt:
+        name:
+          - cowsay
+          - htop
+        state: present

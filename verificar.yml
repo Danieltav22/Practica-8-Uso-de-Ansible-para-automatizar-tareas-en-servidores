@@ -1,0 +1,28 @@
+---
+- name: Verificar los resultados en los cinco servidores
+  hosts: servidores
+  gather_facts: false
+  tasks:
+    - name: Comprobar que existe el usuario itla
+      ansible.builtin.command: id itla
+      changed_when: false
+
+    - name: Consultar el archivo creado
+      ansible.builtin.slurp:
+        src: /app/hola.txt
+      register: archivo_hola
+
+    - name: Verificar el contenido de hola.txt
+      ansible.builtin.assert:
+        that:
+          - "archivo_hola.content | b64decode == 'Hola mundo desde Ansible.\n'"
+
+    - name: Consultar los paquetes instalados
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Comprobar que cowsay y htop estan instalados
+      ansible.builtin.assert:
+        that:
+          - "'cowsay' in ansible_facts.packages"
+          - "'htop' in ansible_facts.packages"
